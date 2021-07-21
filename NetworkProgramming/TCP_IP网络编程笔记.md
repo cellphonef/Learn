@@ -16,13 +16,61 @@
 > 计算机进行数据传输，我们需要接入到互联网，即在互联网中创建一个新的互联网节点接入互联网才能与其他计算机互联通信，而socket就是我们在互联网中的一个节点。我们利用socket来与互联网上的其他
 > 计算机进行数据传输，就好像我们利用插座来获取电力一样。
 
+### 基于Linux的文件操作
 
 
-### 编写“Hello world！”服务器端
+
+
+
+
+
+### 编写“Hello world！”服务端客户端程序
 
 示例代码如下：
 - [hello_server.c](https://github.com/cellphonef/Learn/blob/main/NetworkProgramming/code/hello_server.c)
 - [hello_client.c](https://github.com/cellphonef/Learn/blob/main/NetworkProgramming/code/hello_client.c)
+
+代码说明：
+- 调用socket函数创建socket。
+- 调用bind函数分配IP地址和端口号。
+- 调用listen函数将socket转为可接收连接状态。
+- 调用accept函数受理连接请求。如果在没有连接请求的情况下调用该函数，则不会返回，直到有连接请求为止。
+- 创建socket，但此时socket并不马上分为服务器端和客户端。如果紧接着调用bind、listen函数将成为服务端socket；如果调用connect函数，将成为客户端socket。
+- 调用connect函数向服务器端发送连接请求。
+
+
+
+
+## socket协议及数据传输特性
+
+
+
+socket type
+
+面向连接的socket（SOCK_STREAM）
+
+面向连接的socket有什么特点呢？
+- 传输过程中数据不会丢失。
+- 按序传输数据。
+- 传输的数据不存在数据边界。
+
+
+面向消息的socket（SOCK_DGRAM）
+
+
+## 地址族与数据顺序
+
+
+## 基于TCP的服务端和客户端
+
+
+
+## 基于UDP的服务端和客户端
+
+
+
+
+
 
 
 
