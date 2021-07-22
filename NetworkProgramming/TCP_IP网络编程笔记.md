@@ -41,22 +41,96 @@
 
 
 
+## socket协议及协议设置
 
-## socket协议及数据传输特性
+socket协议的选择在创建socket时进行设置：
+
+```c
+#include <sys/socket.h>
+
+/*
+** domain   socket中使用的协议族（protocol family）。
+** type     socket中使用的数据传输类型信息。
+** protocol socket中使用的协议信息。
+*/
+int socket(int domain, int type, int protocol);
+```
 
 
 
-socket type
+### 协议族
 
-面向连接的socket（SOCK_STREAM）
+socket通信中的协议具有一些分类。通过socket函数的第一个参数传递socket中使用的协议分类信息。此协议分类信息称为协议族，可分为如下几类：
 
-面向连接的socket有什么特点呢？
+| 名称      | 协议族             |
+| :-------- | ------------------ |
+| PF_INET   | IPv4互联网协议族   |
+| PF_INET6  | IPv6互联网协议族   |
+| PF_LOCAL  | 本地通信UNIX协议族 |
+| PF_PACKET | 底层socket的协议族 |
+| PF_IPX    | IPX Novell协议族   |
+
+通常我们只使用PF_INET对应的IPv4互联网协议族。其他协议族并不常用或尚未普及。
+
+
+
+### socket数据传输类型
+
+socket数据传输类型通过socket函数的第二个参数指定。
+
+对于IPv4互联网协议族，有两种不同的数据传输类型。
+
+#### 面向连接的socket（SOCK_STREAM）
+
+面向连接的socket特点：
 - 传输过程中数据不会丢失。
 - 按序传输数据。
 - 传输的数据不存在数据边界。
 
 
-面向消息的socket（SOCK_DGRAM）
+
+收发数据的socket内部有缓冲，简言之就是字节数组。通过socket传输的数据将保存到该数组。因此，收到数据并不意味着马上调用read函数。只要不超过数组容量，则有可能在数据填充满缓冲后通过一次read函数调用读取全部，也有可能分成多次read函数调用进行读取。
+
+
+
+
+
+#### 面向消息的socket（SOCK_DGRAM）
+
+面向消息的socket特点：
+
+
+
+
+
+
+
+### 协议的最终选择
+
+对于IPv4互联网协议族，只有两种数据传输类型，因此确定了前面两个参数即可确定所要使用的协议。因此，大部分情况下可以向第三个参数传递0。
+
+```C
+int tcp_sock = socket(PF_INET, SOCK_STREAM, 0);
+int udp_sock = socket(PF_INET, SOCK_DGRAM, 0);
+```
+
+
+
+### 面向连接的socket: TCP socket示例
+
+使用示例代码验证TCP socket如下特性：
+
+* 传输的数据不存在数据边界。
+
+
+
+示例代码：
+
+* [tcp_server.c](https://github.com/cellphonef/Learn/blob/main/NetworkProgramming/code/tcp_server.c)
+* [tcp_client.c](https://github.com/cellphonef/Learn/blob/main/NetworkProgramming/code/tcp_client.c)
+
+
+
 
 
 ## 地址族与数据顺序
