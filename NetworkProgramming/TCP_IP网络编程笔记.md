@@ -137,11 +137,72 @@ int udp_sock = socket(PF_INET, SOCK_DGRAM, 0);
 
 
 
+### 地址信息的表示
+
+应用程序中使用的IP地址和端口号以结构体的形式给出了定义。
+
+#### 表示IPv4地址的结构体
+
+填写地址信息时应以如下提问为线索进行：
+
+1. 问题一：采用哪一种地址族？
+2. 问题二：IP地址是多少？
+3. 问题三：端口号是多少？
+
+因此结构体定义为如下形态，此结构体作为地址信息传递给bind函数。
+
+```C
+struct sockaddr_in
+{
+    sa_family_t    sin_family;  /* 地址族 */
+    uint16_t       sin_port;    /* 16位TCP/UDP端口号 */
+    struct in_addr sin_addr;    /* 32位IP地址 */
+    char           sin_zero[8]; /* 填充bits */
+}
+
+/* in_addr如下 */
+struct in_addr
+{
+    In_addr_t s_addr;           /* 32为IPv4地址 */
+}
+```
+
+
+
+### 网络字节序与地址变换
+
+
+
+
+
 
 
 
 
 ## 基于TCP的服务端和客户端
+
+
+
+### 实现迭代服务器端/客户端——存在问题
+
+本节编写回声（echo）服务器端/客户端。顾名思义，服务器端将客户端传输的字符串数据原封不动地传回客户端，就像回声一样。
+
+
+
+示例代码：
+
+* [echo_server.c](https://github.com/cellphonef/Learn/blob/main/NetworkProgramming/code/echo_server.c)
+* [echo_client.c](https://github.com/cellphonef/Learn/blob/main/NetworkProgramming/code/echo_client.c)
+
+
+
+
+
+### 实现迭代服务器端/客户端——完美实现
+
+
+
+
 
 
 
