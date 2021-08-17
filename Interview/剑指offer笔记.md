@@ -216,11 +216,30 @@ static全局变量、static局部变量和全局变量都存放在数据段，�
 
 
 
-**面试题0x：new/delete、malloc/free**
+**面试题0x：new/delete、malloc/free，底层使用什么进行分配？**
+
+mmap细节
+
+
+
+**面试题0x：浅拷贝和深拷贝有什么区别？**
 
 
 
 
+**什么是内存泄漏？如何检测？**
+
+内存泄漏，是指由于疏忽或错误造成程序未能释放已经不再使用的内存。内存泄漏并非指内存在物理上消失了，而是应用程序分配某段内存后，由于设计错误导致在释放该内存之前就失去了对该段内存的控制，从而造成内存的浪费。
+
+
+
+
+
+**面试题0x：虚函数表**
+
+**面试题0x：构造函数和析构函数可以是虚函数吗？可以调用虚函数吗？**
+
+构造函数不能是虚函数，而析构函数在某些情况下必须为虚函数。
 
 
 
@@ -245,6 +264,38 @@ STL主要包括三个部分：容器、算法、迭代器。
 | heap           | vector       |                          |
 
 
+vector底层是一个动态数组，包括三个迭代器（由于vector底层是数组，因此可以直接使用元素类型指针作为迭代器），start、finish和end_of_storage。其中[start, finish)表示已经被使用的空间范围（size），[start, end_of_storage)表示整块连续空间（capacity）。当空间不够装下数据时，会自动扩容，重新申请一段连续空间（大小为原来的2倍），然后将原来空间的数据拷贝到新的空间，接着释放原空间（简称三部曲：“申请-拷贝-释放”）。
+
+resize和reserve的区别？
+- resize(n, val), Resizes the container so that it contains n elements.
+  - If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond (and destroying them).
+  - If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n. If n is also greater than current container capacity, an automatic reallocation of the allocated storage takes place.
+- reserve(n), Requests that the vector capacity be at least enough to contain n elements. 
+  - If n is greater than the current vector capacity, the function causes the container to reallocate its storage increasing its capacity to n (or greater).
+  - If all other cases, the function call doses not cause a reallocation and the vector capacity is not affected.
+
+
+
+**面试题0x：STL萃取技术知道吗？**
+
+STL有两种萃取技术：
+- iterator_traits。负责萃取迭代器的特性，以正确完成算法。
+  - iterator_category。
+  - value_type。
+  - difference_type。
+  - pointer。
+  - reference。
+- type_traits。负责萃取类型的特性，以提高执行效率。
+  - has trivial default ctor?
+  - has trivial copy ctor?
+  - has trivial assignment operator?
+  - has trivial dtor?
+  - is pod type?
+
+
+
+
+
 
 **面试题0x：C++11有那些新特性？**
 
@@ -254,10 +305,19 @@ C++11常用的新特性有：
 - 引入auto和decltype关键字。
 - range-for循环。
 - lambda表达式（匿名函数）。
-- std::array和std::forward_list。
-- 右值引用和移动语义。
+- 新的STL容器。
+- 智能指针。
+- 移动语义和完美转发。
 
 
+**面试题0x：c++惯用法有哪些？**
+
+c++惯用法主要有以下几种：
+- 初始化列表
+- 枚举类替换命令空间
+- RAII
+- Copy And Swap
+- Pimpl
 
 
 
@@ -272,6 +332,10 @@ C/C++存在许多最佳实践，在实操中我们应该使用这些最佳实践
 **面试题0x：实现单例模式**
 
 
+饿汉式
+
+懒汉式
+
 
 
 
@@ -279,6 +343,65 @@ C/C++存在许多最佳实践，在实操中我们应该使用这些最佳实践
 
 1. [C++11中局部变量初始化的线程安全性](https://blog.csdn.net/imred/article/details/89069750)
 
+
+
+**面试题0x：限制类对象只能在堆上或只能在栈上**
+
+
+
+
+
+**面试题0x：手写strcpy、memcpy、strcat、strcmp**
+
+```c
+/*
+** 功能：将参数src字符串复制到参数dest所指的地址，包括结束符号。
+** 返回值：返回参数dest所指的地址。
+** 注意：只能用于拷贝字符串。
+*/
+char* strcpy(char* dest, const char* src)
+{
+    char* ret = dest;
+    while (*dest++ = *src++)
+        ;
+    *dest = '\0';
+    return ret;
+}
+
+
+
+/*
+** 功能：从参数src所指的空间逐字节复制num bytes到参数dest所指的地址。
+** 返回值：返回参数dest所指的地址。
+** 注意事项：
+**   1.为了避免溢出，dest和src所指的内存空间的大小至少应该等于num bytes。
+**   2.dest和src所指的内存空间不应该有重叠，否则将会出错。 
+**   3.由于是逐字节拷贝，因此memcpy函数不关心dest和src的类型，它只是把字节拷贝过去。
+*/
+void* memcpy(void* dest, const void* src, size_t num)
+{
+    char* tmp = (char*)dest;
+    const char* s = src;
+
+    while (num--) 
+        *tmp++ = *s++;
+    
+    return dest;
+}
+
+
+/*
+**
+**
+*/
+void memmove(void* dest, const void* src, size_t num)
+{
+
+
+
+}
+
+```
 
 
 
@@ -316,6 +439,6 @@ C/C++存在许多最佳实践，在实操中我们应该使用这些最佳实践
 > 什么样的内存操作是原子的呢？通常情况下，如果一个内存操作使用了多条CPU指令，那么这个内存操作是非原子的。那么只使用一条CPU指令的内存操作是不是就一定是原子的呢？答案是不一定，某些仅仅使用一条CPU的内存操作，在绝大多数CPU架构上是原子，但是，在个别CPU架构上是非原子的。如果，我们想写出可移植的代码，就不能做出使用一条CPU指令的内存操作一定是原子的假设。
 
 
-
+**面试题0x：如何实现一个锁？**
 
 
