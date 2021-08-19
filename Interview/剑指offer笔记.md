@@ -489,6 +489,15 @@ void memmove(void* dest, const void* src, size_t num)
 
 
 
+**面试题0x：堆与栈的区别**
+
+堆与栈主要在以下方面有所区别：
+- 管理方式不同
+- 生长方式不同
+- 碎片问题不同
+- 
+
+
 **面试题0x：Linux虚拟地址空间实现？**
 
 
