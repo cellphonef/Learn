@@ -2,7 +2,7 @@
 
 ## 类的设计与继承
 
-### 32. Be clear what kind of class you're writing
+###  Be clear what kind of class you're writing
 
 **摘要**
 
@@ -17,18 +17,50 @@
 值类（如`std::vector`）模仿的是内置类型。
 
 一个值类应该：
-- 有一个公用的析构函数，带有值语义的复制构造函数和赋值。
-- 用作具体类，不做基类，因此没有虚函数（包括析构函数）。
-- 总是在栈中实例化，或者作为另一个类直接包含的成员实例化。
+- 有一个公用的析构函数，带有值语义的复制构造函数和赋值运算符。
+- 用作具体类，不做基类，因此没有虚函数（包括虚析构函数）。
+- 总是在栈中实例化，或者作为另一个类直接包含的成员实例化（有待考究）。
 
 *基类*
 
 基类是类层次结构的构成要素。
 
 一个基类应该：
-- 有一个公用的且虚拟的，或者保护的而且非虚拟的析构函数，和一个非公用的复制构造函数和赋值操作符。
+- 有一个公用的且虚拟的（即外界可以通过基类指针调用析构函数），或者保护的而且非虚拟的析构函数，和一个非公用的复制构造函数和赋值操作符。
 - 通过虚函数建立接口。
-- 总是动态地在堆中实例化为具体的派生类对象，并通过一个（智能）指针来使用。
+- 总是动态地在堆中实例化为具体的派生类对象，并通过一个（智能）指针来使用（工厂函数）。
+
+
+### Declare destructors virtual in polymorphic base classes.
+
+**摘要**
+
+对于用于多态用途的基类，即其他类会从该类进行公用继承。
+
+
+
+
+### Prevent exceptions from leaving destructors.
+
+**摘要**
+
+析构函数吐出异常十分危险，总会带来"过早结束程序"或"发生不明确行为"的风险。
+
+### Never call virtual functions during construction and destruction.
+
+**摘要**
+
+你不该在你的构造函数和析构函数期间调用虚函数，因为这样的调用并不会带来你预想的结果（暗含：可以调用但结果不理想）。
+
+**讨论**
+
+### Handle assignment to self in operator=.
+
+**摘要**
+
+
+
+
 
 ## 名字空间与模块
 
@@ -42,7 +74,7 @@
 
 **讨论**
 
-名字空间`using`，将会在该语句的所在作用域引入名字。
+名字空间`using`，将会在该语句的所在作用域引入名字（只要是同一名字就会被引入）。
 
 
 **请记住**
@@ -91,6 +123,31 @@ void foo();
 
 
 
+Name lookup
+
+Name lookup is the procedure by which a name, when encountered in a program, is associated with the declaration that introduced it.
+
+For function names, name lookup can associate multiple declarations with the same name, and may obtain additional declarations from argument-dependent lookup (ADL). Template argument deduction may also apply, and the set of declarations is passed to overload resolution, which selects the declaration that will be used. Member access rules, if applicable, are considered only after name lookup and overload resolution.
+
+For all other names (variables, namespaces, classes, etc), name lookup must produce a single declaration in order for the program to compile.
+
+名字查找就是查找与该名字相关的声明来构造一个候选集合的过程：
+- 对于函数名，其候选集合可能包含多个声明（函数重载）。
+- 对于其他名字（变量名，名字空间，类等）候选集合只有一个声明，否则将无法编译。
+
+名字查找包含两种类型：
+- unqualified name lookup.
+- qualified name lookup.
+
+> 模版中还有两种类型的名字：1）dependent name 2）non-dependent name
+
+
+
+
+ADL only works with unqualified names.
+
+
+Because of argument-dependent lookup, non-member functions and non-member operators defined in the same namespace as a class are considered part of the public interface of that class (if they are found through ADL).
 
 
 
@@ -118,6 +175,4 @@ void foo();
 
 
 
-ADL only works with unqualified names.
 
-Because of argument-dependent lookup, non-member functions and non-member operators defined in the same namespace as a class are considered part of the public interface of that class (if they are found through ADL).
