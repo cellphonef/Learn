@@ -166,6 +166,14 @@ MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
 
 
 
+feature map的尺寸计算方式： 
+- $(input\_size + 2 * padding\_size - filter_size) / stride + 1$
+
+把filter看成特征提取器，由神经网络自己训练，越深的网络提取的特征越深越具有一般性。
+
+
+
+
 ## RNN——循环神经网络
 
 
@@ -187,4 +195,40 @@ MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
 例如目标检测情景中：
 
 ![Ground Truth](img/DL基础_2021-09-15-20-27-06.png)
+
+
+
+**iteration**
+- 一个iteration（中译：迭代），每次迭代更新一次网络结构的参数。
+
+**batch-size**
+- 一次迭代所使用的样本称为batch，其数量称为batch-size。
+
+
+**epoch**
+
+- 一个epoch（中译：轮次）指的是遍历完训练集里的每一个样本，即跑完所有batch。
+- 多个epoch的目的是为了寻找全局最低值，因为一个epoch可能到不了全局最低值（参见：[Why are multiple epochs needed for deep learning?](https://www.quora.com/Why-are-multiple-epochs-needed-for-deep-learning)）。
+- 每次epoch通常伴随着shuffle（参见：[浅谈深度学习shuffle问题](https://blog.csdn.net/g_b_l/article/details/109600536)）。
+
+
+**regularization**
+- 译为：正则化。用于防止过拟合。
+- 主要有两种手段：
+  - L2正则化。
+  - Dropout正则化。
+
+
+**normalization**
+- 译为：归一化。用于消除不同数据之间的量纲，方便数据比较和共同处理。
+    - 线性转换：$y = \frac{x - min}{max - min}$
+    - 非线性转换：如对数转换和反余切函数转换。
+
+**gradient vanish& explode**
+- 译为：梯度消失和梯度爆炸
+- 梯度消失是指训练过程中，梯度值几乎消失（变得很小），使得权重无法得到有效更新
+- 梯度爆炸是指训练过程中，梯度值呈现指数增长。
+
+
+## 答疑
 
