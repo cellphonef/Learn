@@ -98,6 +98,8 @@ DL，即Deep Learning=深度学习。
 
 **梯度下降法**
 
+神经网络的梯度下降法能够朝着正确方向行进的本质是：[泰勒公式](https://zhuanlan.zhihu.com/p/36564434)。
+
 BGD（Batch Gradient Descent，批量梯度下降法）
 
 SGD（Stochastic Gradient Descent，随机梯度下降法）
@@ -106,6 +108,78 @@ MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
 
 
 ## 计算图
+
+假设我们优化的目标函数为 $J(a, b, c) = 3(a + b*c)$
+
+我们令 $u = b*c$，$v = a + u$，$J = 3*v$
+
+则我们的计算图如下（设a = 5, b = 3, c = 2）：
+
+![compute graph](img/DL基础_2021-09-22-10-41-43.png)
+
+得到结果为33，这就是一次前向传播的过程（forward）。
+
+如果我们想计算目标函数 $J$ 对于各个自变量的导数，则我们需要反向传播。
+
+**反向传播的推导与编程实现**
+
+网络结果如下图：
+
+![nn](img/DL基础_2021-09-22-13-18-36.png)
+
+目标函数： $E = \frac{1}{2}\sum\limits_{i\in outputs}(t_i - y_i)^2$
+
+符号定义：
+- $net_j = \vec{w_j} \cdot \vec{x_j} = \sum\limits_{i}w_{ji}x_{ji}$，其中 $net_j$ 表示节点 $j$ 的输入加权和，$\vec{w_j}$ 表示节点 $j$ 的输入权重， $\vec{x_j}$ 表示节点 $j$ 的输入特征。
+
+由于 $E$ 是 $net_j$ 的函数，而 $net_j$ 是 $w_{ji}$ 的函数，根据链式法则有：
+- $\frac{\partial{E}}{\partial{w_{ji}}}=\frac{\partial{E}}{\partial{net_j}}\cdot\frac{\partial{net_j}}{\partial{w_{ji}}}$
+
+对于 $\frac{\partial{net_j}}{\partial{w_{ji}}}$ ，其计算方法不管是在隐藏层还是输出层都是一样的，结果都为：
+- $\frac{\partial{net_j}}{\partial{w_{ji}}}=x_{ji}$，其中 $x_{ji}$ 为节点 $i$ 的输出值。
+
+而对于 $\frac{\partial{E}}{\partial{net_j}}$ 的计算则需要区分是输出层还是隐藏层。
+
+*输出层的权重训练*
+
+对于输出层，$net_j$ 通过影响节点 $j$的输出值 $y_j$来影响网络的其他部分，即 $E$ 是 $y_j$ 的函数，而 $y_j$ 是 $net_j$ 的函数。其中 $y_j=sigmoid(net_j)$。所以根据链式求导法则：
+- $\frac{\partial{E}}{\partial{net_j}}=\frac{\partial{E}}{\partial{y_j}}\cdot\frac{\partial{y_j}}{\partial{net_j}}$
+
+考虑上式的第一项：
+- $\frac{\partial{E}}{\partial{y_j}}=\frac{\partial}{\partial{y_j}}\frac{1}{2}\sum\limits_{j\in outputs}(t_j - y_j)^2=-(t_j- y_j)$
+
+考虑上式第二项：
+- $\frac{\partial{y_j}}{\partial{net_j}}=y_j(1-y_j)$
+
+将以上两项带入：
+- $\frac{\partial{E}}{\partial{net_j}} = -(t_j - y_j)y_j(1-y_j)$
+
+此时我们令：
+- $\delta_j = -\frac{\partial{E}}{\partial{net_j}}=(t_j-y_j)y_j(1-y_j)$
+
+
+*隐藏层权重训练*
+
+对于隐藏层，首先我们定义节点 $j$ 的所有直接下游节点的集合为 $Downstream(j)$，例如对于网络结构图中节点4，其直接下游节点集合节点8和9。可以看到 $net_j$只能通过影响集合 $Downstream(j)$ 中的节点的输入值来进一步影响 $E$。设 $net_k$ 为是节点 $j$的下游节点的加权和输入，则 $E$ 是 $net_k$的函数，而 $net_k$ 是 $net_j$ 的函数。因为$net_k$有多个，这里应用全导数公式，可得到：
+- $\frac{\partial{E}}{\partial{net_j}}=\sum\limits_{k \in Downstream(j)}\frac{\partial{E}}{\partial{net_k}}\frac{\partial{net_k}}{\partial{net_j}}$
+- $=\sum\limits_{k \in Downstream(j)}-\delta_k\frac{\partial{net_k}}{\partial{net_j}}$
+- $=\sum\limits_{k \in Downstream(j)}-\delta_k\frac{\partial{net_k}}{\partial{a_j}}\frac{\partial{a_j}}{net_j}$
+- $=\sum\limits_{k \in Downstream(j)}-\delta_k w_{kj}a_j(1-a_j)$
+- $=-a_j(1-a_j)=\sum\limits_{k \in Downstream(j)}-\delta_k w_{kj}$
+
+因为，我们令：
+- $\delta_j = -\frac{\partial{E}}{\partial{net_j}}$
+
+因此，对于隐藏层的误差项：
+- $\delta_j = a_j(1-a_j)\sum\limits_{k \in Downstream(j)}\delta_k w_{kj}$
+
+则各层的权重训练公式如下：
+- $w_{ji} \leftarrow w_{ji} - \eta\frac{\partial{E}}{\partial{w_{ji}}} = w_{ji} + \eta\delta_j x_{ji}$
+
+
+
+
+
 
 
 
