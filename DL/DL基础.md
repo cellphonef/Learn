@@ -107,6 +107,11 @@ SGD（Stochastic Gradient Descent，随机梯度下降法）
 MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
 
 
+**梯度下降算法概览**
+
+
+
+
 ## 计算图
 
 假设我们优化的目标函数为 $J(a, b, c) = 3(a + b*c)$
@@ -177,7 +182,7 @@ MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
 - $w_{ji} \leftarrow w_{ji} - \eta\frac{\partial{E}}{\partial{w_{ji}}} = w_{ji} + \eta\delta_j x_{ji}$
 
 
-
+因此，反向传播的过程就是从后往前传递误差项，然后根据误差项计算梯度。
 
 
 
@@ -237,7 +242,18 @@ MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
 
 ## CNN——卷积神经网络
 
+### CNN的发展史
 
+![CNN](img/DL基础_2021-09-22-20-34-25.png)
+
+CNN1989年问世：
+- 第一个CNN称为**ConvNet**，该模型可以用于可视化认知任务，例如手写数字识别。
+- 1998年，改进后的ConvNet的模型**LeNet**问世，由于其高准确率被工业界采用，自此CNN模型变成最成功的机器学习模型，工业界和学术界都广泛使用。
+- 1998年自2012年，AlexNet
+- VGG
+- ResNet
+- DenseNet
+- EfficientNet
 
 
 feature map的尺寸计算方式： 
@@ -303,6 +319,13 @@ feature map的尺寸计算方式：
 - 梯度消失是指训练过程中，梯度值几乎消失（变得很小），使得权重无法得到有效更新
 - 梯度爆炸是指训练过程中，梯度值呈现指数增长。
 
+
+**fine-tuning**
+- 译为：微调。用于迁移学习。
+
+
+**sota**
+- sota是state-of-the-art的简写，表示最先进的。
 
 ## 答疑
 
