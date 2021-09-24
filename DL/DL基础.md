@@ -96,18 +96,28 @@ DL，即Deep Learning=深度学习。
 
 
 
-**梯度下降法**
+
+**梯度下降算法概览**
 
 神经网络的梯度下降法能够朝着正确方向行进的本质是：[泰勒公式](https://zhuanlan.zhihu.com/p/36564434)。
 
-BGD（Batch Gradient Descent，批量梯度下降法）
+有三种不同的梯度下降算法，其区别在于使用多少数据来计算目标函数的梯度（根据我们手上的数据量，我们折中考虑权重参数更新的准确率以及参数更新的频率）：
+- BGD（Batch Gradient Descent，批量梯度下降法），利用所有训练数据来计算权重参数的梯度后更新梯度，权重参数更新方向准确，但更新频率低。对于凸误差表面，BGD保证能够到达全局最小值，而对于非凸表面，BGD保证能到达一个局部的最小值（并且困于此，不会逃出）。
+- SGD（Stochastic Gradient Descent，随机梯度下降法），利用每一个样本计算一次权重参数的梯度并更新梯度，权重参数更新方向不一定准确（目标函数会波动），但更新频率高。由于SGD的波动，可能会使得权重参数逃离当前的局部最小值，到达另一个更小的局部最小值，不过SGD难以逃离鞍点。
+- MBGD（Mini-Batch Gradient Descent，小批量梯度下降法），以上两种的折中，也最常用。
 
-SGD（Stochastic Gradient Descent，随机梯度下降法）
 
-MBGD（Mini-Batch Gradient Descent，小批量梯度下降法）
+> SGD-M优化
+> 
+> The momentum term increases for dimensions whose gradients point in the same directions and reduces updates for dimensions whose gradients change directions. As a result, we gain faster convergence and reduced oscillation.
 
 
-**梯度下降算法概览**
+> NAG
+> 
+
+
+
+
 
 
 

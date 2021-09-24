@@ -18,6 +18,10 @@ When building a neural network architecture, the fundamental aspects that the ne
 
 所有的neural network module都应该继承`nn.module`，自己创建的网络模型都应该是`nn.module`的子类。
 
+通常来说，我们继承某个类，是希望复用这个类的属性和方法，因此在`nn.module`里面定义或声明了一个神经网络结构该有的所有属性和方法。
+
+
+
 首先是`__init__`和`forward`函数。前者主要用于初始化一些内部需要使用的state。而后者没有实现，只提供声明，需要在子类实现，显然每个网路结构都是不一样的，因此`forward`函数应该在子类中实现，否则报错。
 
 函数`train`和`eval`的作用是将module及其submodule分别设置为training mode和evaluation mode。
@@ -63,6 +67,8 @@ Under the utils.data module, torch provides its own dataset and *DatasetLoader* 
 
 
 ## Tensor module
+
+Tensors are conceptually similar to Numpy arrays. A tensor is an n-dimensional array on which we can operate mathematical functions, accelerate computations via GPUs, and tensors can also be used to keep track of a computational graph and gradients, which prove vital for deep learning. To run a tensor on a GPU, all we need is to cast the tensor into a certain data type.
 
 ## torch.save
 
