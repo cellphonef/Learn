@@ -34,6 +34,13 @@ python内置了两种无序容器：
 - set
 
 
+```python
+>>> d = {'a' : 1, 'b' : 2, 'c' : 3}
+>>> d['a']
+1
+```
+
+
 
 # 高级特性
 
@@ -43,7 +50,14 @@ python内置了两种无序容器：
 
 切片，即从整体中取部分。例如从`list`或`tuple`取出部分元素。
 
-## 迭代
+
+参考文献：[切片完全指南](https://zhuanlan.zhihu.com/p/79541418)
+
+
+对于多维数组，每个维度又可以看成是一维的切片。
+
+
+
 
 
 ## 列表生成式
@@ -67,22 +81,30 @@ python内置了两种无序容器：
 g = (x * x for x in range(10))  # 将列表生成器的[]替换成()
 
 # 使用
-next(g)   # 不断调用next，每次推演出下一个元素
+next(g)
+# ...不断next(g)推导出下一个元素
 
-# 为了方便通常使用for
+# 为了方便通常使用for，因为for会自动调用next以及处理异常
 for x in g:
     print(x)
 
 
-# 第二种
+# 第二种，显然难以使用列表生成器的形式推导
 def fib(int x):
     n, a, b = 0, 0, 1
     while n < max:
-        yield b                 # 运行到yield会停下直到下次next()调用
+        yield b  # 运行到yield会停下直到下次next()调用
         a, b = b, a + b
         n = n + 1
 
+# 使用
+f = fib(6)
+next(f)
+# ... 不断next(f)推导出下一个元素
 
+# 为了方便通常使用for，因为for会自动调用next以及处理异常
+for x in f:
+    print(x)
 
 ```
 
@@ -151,3 +173,14 @@ os模块中最重要的就是
 
 os.path主要用于获取文件的属性。
 
+
+
+# 常用函数
+
+- enumerate()，用于将一个可迭代对象组合为一个索引序列，同时包括数据下标和数据。
+- format()，用于格式化输出。
+
+
+# numpy
+
+设axis=i，则numpy沿着第i个下标变化的方向进行操作。
