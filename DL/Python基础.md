@@ -156,6 +156,34 @@ while True:
 # 面向对象编程
 
 
+## magic method
+
+
+
+如果调用magic method
+
+许多magic method直接对应到内置函数，此时我们的如果调用magic method就一目了然了，但是某些magic method的调用方式不是那么显然的，这时我们就需要知道magic method与其特殊的调用方式了。
+
+
+|Magic Method| 何时调用（例子）|解释|
+|------------|--------------|----|
+|`__new__`   |instance = MyClass(arg1, arg2)| 创建实例对象时调用|
+|`__init__`|||
+|`__index__`|`x[self]`||
+|`__getattr__(self, name)`|`self.name #name不存在`|访问不存在属性|
+|`__setattr__(self, name, val)`|`self.name = val`|给属性赋值|
+|`delattr__(self, name)`|`del self.name`|删除一个属性|
+|`__getattribute__(self, name)`|||
+|`__getitem__(self, key)`|||
+|`__setitem__(self, key, val)`|||
+|`__delitem(self, key)`|||
+|`__iter(self)__`|`for x in self`||
+|`__contain__(self, value)`|`value in self, value not in self`||
+|`__call__(self [, ...])`|`self(args)`||
+|`__enter__(self)`|||
+|`__exit(self, exc, val, trace)`|||
+|`__getstate__(self)`|`pickle,dump(pkl_file, self)`||
+|`__setstate__(self)`|`data = pickle.load(pkl_file)`||
 
 # 模块
 

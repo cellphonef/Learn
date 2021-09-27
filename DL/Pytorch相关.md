@@ -35,7 +35,7 @@ When building a neural network architecture, the fundamental aspects that the ne
 
 函数`require_grad_`和`zero_grad`
 
-函数`__call__`
+函数`__call__`会调用`forward`函数。
 
 对于函数`parameters`，我们可以使用`for param in parameters()`来遍历网络模型中的参数，因为该函数返回的是一个迭代器`iterator`。我们在使用优化算法的时候就是将`model.parameters()`传递给优化器`Optimizer`。与之类似的还有函数`buffers`、函数`children`和函数`modules`。
 
