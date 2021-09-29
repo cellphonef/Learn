@@ -187,6 +187,33 @@ while True:
 |`__next__(self)`|`next(self)`||
 |`__iter__(self)`|`iter(self)`|for循环中会隐式调用iter，该函数应该返回一个迭代器|
 
+**Python中的with-as用法**
+
+有一些任务，可能事先需要设置，事后做清理工作。对于这种场景，python的with语句提供了一种非常方便的处理方式。
+
+e.g. 文件处理
+
+```python
+# 不使用with，冗长
+file = open("file.txt")
+try:
+    data = file.read()
+finally:
+    file.close()
+
+# 使用with，简洁
+with open("file.txt") as f
+    data = f.read()
+```
+
+with的工作原理是：所求值对象必须有`__enter__`和`__exit__`方法。
+紧跟在with后面的语句被求值后，返回的对象的`__enter__`方法会被调用，这个方法将其返回值赋值给as后面的变量。当with后面的代码块执行完后或者with后面的代码执行时发生异常，将调用前面返回对象的`__exit__方法`执行清理工作。
+
+
+
+
+
+
 # 模块
 
 ## sys

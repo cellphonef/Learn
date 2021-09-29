@@ -201,6 +201,13 @@ The *optim* module includes all the tools and functionalities related to running
 
 优化器的作用就是根据学习率和求得的梯度来更新梯度。
 
+优化器是与权重参数和梯度打交道的，它有以下常用方法：
+- zero_grad：将梯度清零（不清零的话会累加）。
+
+
+
+一个batch的loss关于weight的导数是所有sample的loss关于weight导数的累加和。
+
 
 
 ## train & test
@@ -209,6 +216,14 @@ The *optim* module includes all the tools and functionalities related to running
 > 
 > -> 定义训练方法和测试方法
 
+训练过程对于每个batch执行的基本步骤：
+1. 梯度清零：`optimize.zero_grad()`
+2. 前向传播得到预测值：`outputs = model(input)`
+3. 计算损失：`loss = criterion(outputs, labels)`
+4. 反向传播：`loss.backward()`
+5. 更新参数：`optimize.step()`
+
+
 ```python
 # model: 待训练的模型
 # device: 使用的设备
@@ -216,7 +231,7 @@ The *optim* module includes all the tools and functionalities related to running
 # optim: 优化器
 # epoch: 轮次
 def train(model, device, train_dataloader, optim, epoch)
-    model.train()  
+    model.train()    # 使用BN和Dropout生效
     optim.zero_grad()
     pred_prob = model()
     loss = F.nll_loss(pred_prob, y)
@@ -234,7 +249,12 @@ def test(model, device, test_dataloader)
 ```
 
 
+**torch.no_grad**
 
+```python
+with torch.no_grad():
+    # ...
+```
 
 
 
@@ -248,9 +268,11 @@ Pytorch中的计算依赖于Tensor。一个Tensor中记录了很多属性其中�
 - data：存储的数据。
 - requires_grad：是否需要求导，默认为False。只要有输入Tensor的requires_grad为True，则其输出Tensor也需要求导。
 - grad：该Tensor的梯度。
-- grad_fn：用于指示梯度函数的类型。
-- is_leaf：用来指示该Tensor是否为叶子节点。
+- grad_fn：用于指示梯度函数的类型，用于计算该tensor的output对于input的梯度。
+- is_leaf：用来指示该Tensor是否为叶子节点，只有叶子节点才会保留梯度。
 
 
-
+继续阅读：
+- [Understanding pytorch’s autograd with grad_fn and next_functions](https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00)
+- [Getting Started with PyTorch Part 1: Understanding how Automatic Differentiation works](https://towardsdatascience.com/getting-started-with-pytorch-part-1-understanding-how-automatic-differentiation-works-5008282073ec)
 
