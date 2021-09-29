@@ -171,7 +171,7 @@ while True:
 |`__init__`|||
 |`__index__`|`x[self]`||
 |`__getattr__(self, name)`|`self.name #name不存在`|访问不存在属性|
-|`__setattr__(self, name, val)`|`self.name = val`|给属性赋值|
+|`__setattr__(self, name, val)`|`self.name = val`|给属性赋值时|
 |`delattr__(self, name)`|`del self.name`|删除一个属性|
 |`__getattribute__(self, name)`|||
 |`__getitem__(self, key)`|||
@@ -184,6 +184,8 @@ while True:
 |`__exit(self, exc, val, trace)`|||
 |`__getstate__(self)`|`pickle,dump(pkl_file, self)`||
 |`__setstate__(self)`|`data = pickle.load(pkl_file)`||
+|`__next__(self)`|`next(self)`||
+|`__iter__(self)`|`iter(self)`|for循环中会隐式调用iter，该函数应该返回一个迭代器|
 
 # 模块
 
