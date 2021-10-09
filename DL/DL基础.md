@@ -60,6 +60,8 @@ DL，即Deep Learning=深度学习。
 
 ### 计算机中实现梯度下降——计算图
 
+> 计算图就是一个有向无环图。
+
 假设我们优化的目标函数为 $J(a, b, c) = 3(a + b*c)$
 
 我们令 $u = b*c$，$v = a + u$，$J = 3*v$
@@ -207,9 +209,11 @@ CNN1989年问世：
 
 
 feature map的尺寸计算方式： 
-- $(input\_size + 2 * padding\_size - filter_size) / stride + 1$
+- $(input\_size + 2 * padding\_size - filter\_size) / stride + 1$
 
 把filter看成特征提取器，由神经网络自己训练，越深的网络提取的特征越深越具有一般性。
+
+
 
 
 

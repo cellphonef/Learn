@@ -272,6 +272,25 @@ Pytorch中的计算依赖于Tensor。一个Tensor中记录了很多属性其中�
 - is_leaf：用来指示该Tensor是否为叶子节点，只有叶子节点才会保留梯度。
 
 
+为了使用自动求导（autograd）：
+1. 创建叶子节点。首先要创建初始参数（叶子节点），并将初始参数的`requires_grad`设为true。
+2. 前向结算。接着将初始参数进行运算得到中间结果（非叶子节点），该中间结果是新的tensor对象并且自动被赋予`grad_fn`属性，该属性为梯度函数。
+3. 反向传播。对最后的结果执行`backward`则会进行反向传播，求出各个叶子节点的梯度，保存在`grad`里面。
+
+
+注意：
+- 非叶子节点的梯度在`backward`执行完后会清空。如果要保留则需要将`retain_graph`设置为true。
+- 多次反向传播时，梯度是累加的，因此每次进行梯度计算时需要考虑是否清零。
+
+
+对于Function，其是反向传播的关键，Tensor和Function互相结合就可以构建一个记录有整个计算过程的有向无环图。Function包含两个重要函数forward和backward，其中forward将保留足够的信息用于backward，backward接收由实参传递的对于output的gradient，并通过该gradient计算所有input的gradient然后返回。
+
+
+
+数学上，如果有一个函数值和自变量都为向量的函数 $\vec{y} = f(\vec{x})$，那么 $\vec{y}$ 关于 $\vec{x}$ 的梯度就是一个雅克比矩阵：
+$$J = \left( \frac{\partial{y_1}}{\partial{x_1}} \right)$$
+
+
 继续阅读：
 - [Understanding pytorch’s autograd with grad_fn and next_functions](https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00)
 - [Getting Started with PyTorch Part 1: Understanding how Automatic Differentiation works](https://towardsdatascience.com/getting-started-with-pytorch-part-1-understanding-how-automatic-differentiation-works-5008282073ec)
