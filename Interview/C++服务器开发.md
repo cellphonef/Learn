@@ -37,7 +37,7 @@ C++14则增加了auto和decltype的使用场景。
 
 **std::move和std::forward**
 
-
+std::move是无条件的将目标转换成右值，而std::forward则是有条件对目标左右值进行转换（如果）。
 
 
 #### 可调用对象
