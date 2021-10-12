@@ -23,6 +23,44 @@ $ git reset --hard commit_id
 
 
 
+## git远程仓库
+
+**查看远程仓库**
+
+使用`git remote`查看远程仓库或者`git remote -v`查看远程仓库URL。
+
+```bash
+$ git remote
+# origin
+
+$ git remote -v
+#origin  git@github.com:cellphonef/Learn.git (fetch)
+#origin  git@github.com:cellphonef/Learn.git (push)
+```
+
+**添加远程仓库**
+
+使用`git clone`或者`git remote add`可以添加远程仓库。
+
+使用`git clone`来克隆一个远程仓库，命令会自动将该仓库添加为远程仓库并默认以origin命名。
+
+
+**从远程仓库中抓取与拉取**
+
+使用`git fetch <remote>`从远程仓库中获得数据。
+
+该命令会访问远程仓库，从中拉取所有你还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。
+
+必须注意`git fetch`命令只会将数据下载到你的本地仓库——它并不会自动合并或修改你当前的工作。当准备好时你必须手动将其合并入你的工作。
+
+如果你的当前分支设置了跟踪远程分支，那么可以用`git pull`命令来自动抓取后合并该远程分支到当前分支。（默认情况下，使用`git clone`克隆远程仓库，该命令会自动设置本地main分支跟踪克隆的远程仓库的main分支）
+
+****
+
+
+
+
+
 
 ## git文件重命名
 
