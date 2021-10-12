@@ -40,7 +40,9 @@ C++14则增加了auto和decltype的使用场景。
 std::move是无条件的将目标转换成右值，而std::forward则是有条件对目标左右值进行转换（如果）。
 
 
-#### 可调用对象
+
+
+#### 可调用对象（callable object）
 
 C++11的可调用对象是指：
 - 普通函数。
@@ -102,8 +104,8 @@ C++11有三种智能指针：
 
 ```C++
 // 方式一
-Widge* p = new Widgt;
-shared_ptr<Widge> sp(p);
+Widge* p = new Widgt;     // 1. 进行第一次动态分配
+shared_ptr<Widge> sp(p);  // 2. 进行第二次动态分配（分配控制块）
 
 ```
 
@@ -114,6 +116,10 @@ shared_ptr<Widge> sp(p);
 参考：[std::make_shared](https://blog.csdn.net/zhgeliang/article/details/81237053)
 
 
+
+
+
+#### 异步编程
 
 
 
