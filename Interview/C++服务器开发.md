@@ -2,6 +2,16 @@
 
 ## C++语言
 
+
+### C++基础
+
+**野指针 vs 悬空指针**
+
+A wild pointer is a pointer that has non been correctly initialized and therefore points to some random piece of memory. It is a serious error to have wild pointers.
+
+A dangling pointer is a pointer that used to point to a valid address but now no longer does. There is nothing wrong with having a dangling pointer unless you try to access the memory location pointed at by that pointer. It is always best practise not to have or leave dangling pointers. 
+
+
 ### C++11已弃用特性
 
 弃用（deprecate）并非彻底不能用，只是暗示程序员这些特性将来会从标准中移除，应该尽量避免使用。但是已弃用的特性仍然是标准库的一部分，并且出于兼容性的考虑大部分特性其实会永久保留。
@@ -14,7 +24,7 @@
 
 
 
-### C++11/14/17新特性
+### C++11/14/17/...新特性
 
 #### 自动类型推导
 
