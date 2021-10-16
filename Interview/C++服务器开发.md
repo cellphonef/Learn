@@ -379,7 +379,12 @@ pthread_cond_signal(&cond);            // p4
 因此线程池（ThreadPool）的组件包括以下内容：
 - 任务队列存放要执行的函数（TaskQueue）。
 - 工作线程（worker）。
-- 
+
+
+
+
+### Go on reading
+
 
 
 
