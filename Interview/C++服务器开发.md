@@ -52,7 +52,7 @@ C++14则增加了auto和decltype的使用场景。
 
 **std::move和std::forward**
 
-std::move是无条件的将目标转换成右值，而std::forward则是有条件对目标左右值进行转换（如果）。
+std::move是无条件的将目标转换成右值，而std::forward则是有条件对目标左右值进行转换（因此需要将其原始类型作为类型参数传入）。
 
 
 
@@ -157,6 +157,14 @@ shared_ptr<Widge> sp(p);  // 2. 进行第二次动态分配（分配控制块）
 
 
 
+**std::future**
+
+
+
+**std::async & std::package_task & std::promise**
+
+
+
 
 
 
@@ -226,6 +234,17 @@ Pimpl也是一个C++常用的惯用法，它是"Pointer to implement"的首字�
 
 作用：避免编译依赖，加速编译
 
+
+
+
+**3. Copy and Swap**
+
+
+
+### C++ design patterns
+
+
+#### 简单工厂模式、抽象工厂、模板工厂
 
 
 ## 工具链
