@@ -12,6 +12,14 @@ A **wild pointer** is a pointer that has non been correctly initialized and ther
 A **dangling pointer** is a pointer that used to point to a valid address but now no longer does. There is nothing wrong with having a dangling pointer unless you try to access the memory location pointed at by that pointer. It is always best practise not to have or leave dangling pointers. 
 
 
+预处理的结果称为**编译单元（translation unit）**。编译单元是编译器真正处理的内容，也是C++语言规则所描述的内容。
+
+
+链接属性：
+- 如果一个名字在其定义处之外的编译单元中也可以使用，我们称其具有**外部链接（external linkage）**。
+- 如果一个名字只能在其定义所在的编译单元使用，我们称其具有**内部链接（internal linkage）**。
+- 链接器看不到的名字，则为**无链接（no linkage）**。
+
 
 
 
