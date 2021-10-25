@@ -450,11 +450,16 @@ mutex使并行串行化。
 
 
 
+C++重要blog：
+- [important C++ blog](https://preshing.com/about/)
 
 
+多线程编程重要阅读：
+- [Parallel Computer Architecture and Programming (CMU 15-418/618)](http://www.cs.cmu.edu/~418/resources.html)
+- [线程如果切换到其它的core上运行,如何保证缓存一致性？](https://www.zhihu.com/question/334107371/answer/757179110)
 
 
-
+内存屏障的作用就是防止内存乱序。
 
 
   
