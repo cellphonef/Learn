@@ -67,6 +67,10 @@ A **dangling pointer** is a pointer that used to point to a valid address but no
 
 
 
+#### C++函数调用解析过程
+
+
+
 
 
 
@@ -460,6 +464,8 @@ C++重要blog：
 
 
 内存屏障的作用就是防止内存乱序。
+
+
 
 
   
