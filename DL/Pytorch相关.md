@@ -115,7 +115,7 @@ cn.load_state_dict(state_dict)
 
 
 
-**神经网络各种层——以nn.Linear为例**
+**全连接层——Linear**
 
 神经网络的各种层，如全连接层或卷积层都继承于`nn.module`。
 
@@ -126,6 +126,103 @@ cn.load_state_dict(state_dict)
 对于包含内在参数的函数，都会定义如下函数：
 - `reset_parameter`：用于初始化参数，通常使用Xavier。
 
+Linear，即线性层，也可以用作全连接层。
+
+step1：构造一个全连接层
+
+```python
+# in_features: 输入样本尺寸，无默认值
+# out_features: 输出样本尺寸，无默认值
+# bias: 是否添加bias，默认为True
+Linear(in_features, out_features, bias = True, device = None, dtype = None)
+```
+
+step2：输入输出
+- 输入Input为：$(*, H_{in})$。 
+- 输出Output为：$(*, H_{out})$。
+
+
+step3：可学习参数
+- 全连接层权重weight，shape为(out_features, in_features)。
+- 全连接层偏置bias，shape为(out_features)。
+
+
+
+**卷积层——Conv2D**
+
+Conv2D，即2维卷积层。
+
+step1：构造一个2维卷积层
+
+```python
+# in_channels(int): 输入图像的通道数，无默认值
+# out_channels(int): 卷积后输出通道数（与kernel数量相同），无默认值
+# kernel_size(int or tuple): 卷积核尺寸，无默认值
+# stride(int or tuple): 步长，默认值为1
+# padding(int, tuple or str): 填充值，默认值为0
+# diliation: 
+# groups: 
+# bias: 是否添加bias，默认为True
+# padding_mode: 
+# device: 
+# dtype: 
+Conv2d(in_channels, out_channels, kernel_size, stride = 1, padding = 0,
+       diliation = 1, groups = 1, bias = True, padding_mode = 'zeros', 
+       device = None, dtype = None)
+```
+
+step2：输入输出
+- 输入Input为：$(N, C_{in}, H_{in}, W_{in})$
+- 输出Ouput为：$(N, C_{out}, H_{out}, W_{out})$
+
+
+step3：可学习参数
+- 卷积层权重weight，shape为 $(out\_channels, \frac{in\_channels}{groups}, kernel\_size[0], kernel\_size[1])$
+- 卷积层偏置bias，shape为 $(out\_channels)$
+
+
+**池化层——MaxPool2d**
+
+MaxPool2d，即2维最大值池化层。
+
+step1：构造一个二维最大值池化层
+
+```python
+# kernel_size: 卷积核大小
+# stride: 卷积核步长，默认大小与kernel_size相同
+# padding:
+# dilation:
+# ceil_mode:
+MaxPool2d(kernel_size, stride =  None, padding = 0, dilation = 1,
+          return_indices = False, ceil_mode = False)
+
+```
+
+step2：输入输出
+- 输入Input为：$$
+- 输出Output为：$$
+
+step3：无可学习参数
+
+
+**标准化层——BatchNorm2d**
+
+BatchNorm2d，即2维批标准化层。
+
+step1：构造一个2维批标准化层
+
+```python
+# 
+BatchNorm2d(num_features, eps=1e-05, momentum = 0.1, affine = True,
+            track_running_stats = True, device = None, dtype = None)
+```
+
+step2：输入输出
+- 输入Input：$(N, C, H, W)$
+- 输出Output：$(N, C, H, W)$ 与输入相同。
+
+
+step3：无可学习参数
 
 
 
