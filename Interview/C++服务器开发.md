@@ -69,8 +69,11 @@ A **dangling pointer** is a pointer that used to point to a valid address but no
 
 #### C++函数调用解析过程
 
+看一文：[How C++ Resolves a Function Call](https://preshing.com/20210315/how-cpp-resolves-a-function-call/)
 
+加一图足矣：
 
+![how cpp resolves a function call](img/C++服务器开发_2021-10-27-19-02-23.png)
 
 
 
@@ -328,6 +331,7 @@ gcc指令常用参数：
 - -o
 
 
+
 **gdb调试**
 
 
@@ -352,6 +356,10 @@ gdb常用调试命令：
 |watch  |watch |监视某个变量或内存地址的值是否发生变化|
 |set args|     |设置程序启动命令行参数 |
 |show args |    |查看设置的命令行参数|
+
+### 构造跨平台project——CMake
+
+
 
 
 
