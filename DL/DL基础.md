@@ -263,7 +263,9 @@ CNN1989年问世：
 - 第一个CNN称为**ConvNet**，该模型可以用于可视化认知任务，例如手写数字识别。
 - 1998年，改进后的ConvNet的模型**LeNet**问世，由于其高准确率被工业界采用，自此CNN模型变成最成功的机器学习模型，工业界和学术界都广泛使用。
 - 1998年自2012年，AlexNet
-- VGG
+- GoogleNet
+- VGGNet
+- (skip connection start)...
 - ResNet
 - DenseNet
 - EfficientNet

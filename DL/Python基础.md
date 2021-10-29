@@ -2,8 +2,6 @@
 
 # 数据类型
 
-
-
 ## 字符串
 
 字符串是不可变对象。
@@ -112,32 +110,14 @@ for x in f:
 
 ## 迭代器
 
-**可迭代对象和迭代器**
+**可迭代对象和迭代器辨析**
 
 - 凡是可用于for循环的对象都是可迭代对象，即是`Iterable`类型。
 - 凡是可作用于`next()`函数的对象都是Iterator类型，它们表示一个惰性计算的序列。
 - 集合数据类型如`list`、`dict`、`str`等是`Iterable`但不是`Iterator`，不过可以通过`iter()`函数获得一个`Iterator`对象。
 - `Iterator`对象一定`Iterable`。
 
-Python中的for循环本质上就是通过不断调用`next()`函数实现的，例如：
 
-```python
-for x in [1, 2, 3, 4, 5]:
-    print(x)
-```
-
-实际上完全等价为：
-
-```python
-it = iter([1, 2, 3, 4, 5])
-
-while True:
-    try:
-        x = next(it)
-        print(x)
-    except StopIteration:
-        break
-```
 
 
 
@@ -184,30 +164,9 @@ while True:
 |`__exit(self, exc, val, trace)`|||
 |`__getstate__(self)`|`pickle,dump(pkl_file, self)`||
 |`__setstate__(self)`|`data = pickle.load(pkl_file)`||
-|`__next__(self)`|`next(self)`||
+|`__next__(self)`|`next(self)`|返回下一个|
 |`__iter__(self)`|`iter(self)`|for循环中会隐式调用iter，该函数应该返回一个迭代器|
 
-**Python中的with-as用法**
-
-有一些任务，可能事先需要设置，事后做清理工作。对于这种场景，python的with语句提供了一种非常方便的处理方式。
-
-e.g. 文件处理
-
-```python
-# 不使用with，冗长
-file = open("file.txt")
-try:
-    data = file.read()
-finally:
-    file.close()
-
-# 使用with，简洁
-with open("file.txt") as f
-    data = f.read()
-```
-
-with的工作原理是：所求值对象必须有`__enter__`和`__exit__`方法。
-紧跟在with后面的语句被求值后，返回的对象的`__enter__`方法会被调用，这个方法将其返回值赋值给as后面的变量。当with后面的代码块执行完后或者with后面的代码执行时发生异常，将调用前面返回对象的`__exit__方法`执行清理工作。
 
 
 
@@ -241,3 +200,57 @@ os.path主要用于获取文件的属性。
 # numpy
 
 设axis=i，则numpy沿着第i个下标变化的方向进行操作。
+
+
+# python语法糖
+
+## with-as用法
+
+有一些任务，可能事先需要设置，事后做清理工作。对于这种场景，python的with语句提供了一种非常方便的处理方式。
+
+e.g. 文件处理
+
+```python
+# 不使用with，冗长
+file = open("file.txt")
+try:
+    data = file.read()
+finally:
+    file.close()
+
+# 使用with，简洁
+with open("file.txt") as f
+    data = f.read()
+```
+
+with的工作原理是：所求值对象必须有`__enter__`和`__exit__`方法。
+紧跟在with后面的语句被求值后，返回的对象的`__enter__`方法会被调用，这个方法将其返回值赋值给as后面的变量。当with后面的代码块执行完后或者with后面的代码执行时发生异常，将调用前面返回对象的`__exit__方法`执行清理工作。
+
+
+## for ... in Sequence用法
+
+Python中的for循环本质上就是通过不断调用`next()`函数实现的，例如：
+
+```python
+for x in [1, 2, 3, 4, 5]:
+    print(x)
+```
+
+实际上完全等价为：
+
+```python
+it = iter([1, 2, 3, 4, 5])  # iter()返回一个迭代器，而迭代器是指实现了__next__方法。
+
+while True:
+    try:
+        x = next(it)  # next()实际上是调用__next__方法。
+        print(x)
+    except StopIteration:
+        break
+```
+
+
+## 可变形参、参数解包
+
+参考链接：
+- [Python之可变参数、参数解包](https://blog.csdn.net/cadi2011/article/details/84871401)
