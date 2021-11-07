@@ -63,6 +63,8 @@ IP协议的作用是用来定位一台主机的。
 
 ## C++语言
 
+C++重要blog：
+- [important C++ blog](https://preshing.com/about/)
 
 ### C++基础
 
@@ -385,10 +387,12 @@ gdb常用调试命令：
 
 - 「临界区」——访问和操作共享数据的代码段。
 
+因此，在多线程编程中需要找出临界区，并对临界区进行同步。
 
 
 
-**总结**
+
+**不同粒度的同步**
 
 as-if-serial semantics: 编译器和处理器为了提高指令执行的吞吐量会做各种压榨性能的优化，但是不管如何优化都必须程序在单线程执行下的正确性，就好像（as-if）程序仍然是串行执行的（serial）。
 
@@ -402,17 +406,9 @@ as-if-serial semantics: 编译器和处理器为了提高指令执行的吞吐�
 
 观察顺序其实就是某个cpu的内存顺序。
 
-
-
-
-
-
-
-
-
 在单线程中，执行顺序一定等于观察顺序，否则就无法保证单线程执行的结果的正确性。
 
-有缓存一致性能保证执行顺序等于观察顺序（内存顺序）。
+有缓存一致性（未优化前）能保证执行顺序等于观察顺序（内存顺序）。
 引入store-buffer会导致执行顺序不等于观察顺序，内存顺序乱序。
 
 
@@ -440,9 +436,6 @@ flag = true;  // store
 // cpu1
 while(!flag);  // read
 assert(x == 1024);  // read
-
-
-
 ```
 
 
@@ -476,17 +469,6 @@ void bar(void)
 
 mutex使并行串行化。
 
-
-
-C++重要blog：
-- [important C++ blog](https://preshing.com/about/)
-
-
-多线程编程重要阅读：
-- [Parallel Computer Architecture and Programming (CMU 15-418/618)](http://www.cs.cmu.edu/~418/resources.html)
-- [线程如果切换到其它的core上运行,如何保证缓存一致性？](https://www.zhihu.com/question/334107371/answer/757179110)
-
-
 内存屏障的作用就是防止内存乱序。
 
 
@@ -515,12 +497,12 @@ C++重要blog：
 锁有多种多样的形式，而且加锁的粒度范围也各不相同——Linux自身实现了几种不同的锁机制。各种锁机制之间的区别主要在于：当锁已经被其他线程持有，因而不可用时的行为表现。
 
 主要有两种行为表现：
-- 自旋等待。
-- 睡眠。
+- 自旋等待（spin）。
+- 睡眠（sleep）。
 
 
 
-**自旋锁**
+**自旋锁（spinlock）**
 
 
 
@@ -579,10 +561,11 @@ pthread_mutex_unlock(&mtx);            // c4
 // 生产者
 pthread_mutex_lock(&mtx);              // p1
 produce_data(vec);                     // p2
-pthread_mutex_unlock(&mtx);            // p3
-pthread_cond_signal(&cond);            // p4 
+pthread_cond_signal(&cond);            // p3
+pthread_mutex_unlock(&mtx);            // p4
 ```
 
+将signal放在unlock前，可以保证代码可读性，以及提供一个可预测的调度行为。
 
 ### 应用——线程池
 
@@ -599,7 +582,8 @@ pthread_cond_signal(&cond);            // p4
 
 ### Go on reading
 
-
+- [Parallel Computer Architecture and Programming (CMU 15-418/618)](http://www.cs.cmu.edu/~418/resources.html)
+- [线程如果切换到其它的core上运行,如何保证缓存一致性？](https://www.zhihu.com/question/334107371/answer/757179110)
 
 
 ## 网络编程
