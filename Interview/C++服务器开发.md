@@ -610,6 +610,52 @@ pthread_cond_signal(&cond);            // p4
 > 不要单纯地记忆这些函数的参数，而是掌握每一个函数的细节和重难点。
 
 
+#### IO复用
+
+**select**
+
+select系统调用的原型如下：
+```C++
+#include <sys/select.h>
+int select(int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds,
+           struct timeval* timeout);
+
+// ndf参数指定被监听的文件描述符的总数，通常设置为select监听的所有文件描述符中的最大值加1，因为文件描述符从0开始计数。
+// readfds、writefds、exceptfds参数分别指向可读、可写、异常事件对应的文件描述符集合。应用程序通过这3个参数传入自己感兴趣的文件描述符。select调用返回后，内核将修改它们来通知应用程序哪些文件描述符已经就绪。
+// timeout参数用来设置select函数的超时时间。
+```
+
+该系统调用存在以下缺点：
+- 每次都要重新置位fd_set然后将其从用户空间拷贝到内核空间（拷贝开销）。
+- 每次都要遍历整个数组才能获取所有事件（遍历开销）。
+
+**poll**
+
+poll的系统调用原型如下：
+```C++
+#include <poll.h>
+int poll(struct pollfd* fds, nfds_t nfds, int timeout);
+
+// fds参数是一个pollfd结构类型的数组，它指定所有我们感兴趣的文件描述符上发生的可读、可写和异常等事件。
+// nfds
+
+```
+
+
+**epoll**
+
+epoll通过一组函数来完成工作：
+- epoll_create
+- epoll_ctl
+- epoll_wait
+
+epoll系统调用原型如下：
+```C++
+#include <sys/epoll.h>
+int epoll_create(int size);
+```
+
+
 
 ## 高性能服务器开发
 
