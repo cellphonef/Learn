@@ -794,6 +794,53 @@ int epoll_create(int size);
 
 ## 代码规范和工程实践
 
+### 通用代码规范
+
+**命名规则**：
+- 文件命名：`my_file.h`，下划线连接具体描述性名字。
+- 类型命名：`MyType`，采用大驼峰命名法。
+- 变量命名：
+  - 普通变量：`table_name`，下划线连接具体描述性名字。
+  - 类成员变量：`table_name_`，下划线连接具体描述性名字并以下划线结尾。
+  - 常量：`kTabelName`
+- 函数命名：`DoSomething()`，采用大驼峰命名法并且使用动宾结构。
+
+**注释**：
+- 统一采用//。
+- 文件开头要有版权注释。
+- 每个类都要注释，描述类的功能和用法。
+- 函数声明处的注释描述函数的功能，函数定义处的注释描述函数的实现。
+
+
+**函数** 
+```C++
+// 形参的第一种写法，不直接换行
+std::vector<std::string> SplitString(StringPiece input,
+                                     StringPiece separators,
+                                     WhitespaceHandling whitespace,
+                                     SplitResult result_type) {
+  return internal::SplitStringT<std::string>(input, separators, whitespace,
+                                             result_type); // 调用函数时的第一种写法，不直接换行
+}
+
+// 形参的第二种写法，直接换行空四格
+std::vector<StringPiece16> SplitStringPieceUsingSubstr(
+    StringPiece16 input,
+    StringPiece16 delimiter,
+    WhitespaceHandling whitespace,
+    SplitResult result_type) {
+  std::vector<StringPiece16> result;
+  return internal::SplitStringUsingSubstrT<StringPiece16>(
+      input, delimiter, whitespace, result_type); // 调用函数的第二种写法，直接换行空四格
+}
+
+```
+
+**类**
+
+```C++
+
+```
 
 
 ### 如何设计一个类？
@@ -803,6 +850,10 @@ int epoll_create(int size);
 
 **准则2**：
 
+
+
+类编写规范（参考Google）：
+- 访问控制符先public后private。
 
 
 
@@ -834,4 +885,6 @@ CMAKE
 **准则1**：必须包含定义了该实现文件的接口的头文件，作用是为了编译器做早期的一致性检查。
 
 **准则2**：绝对不要在#include指令之前使用using声明或using指令。
+
+
 
