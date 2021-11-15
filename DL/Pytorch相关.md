@@ -388,7 +388,42 @@ Pytorch中的计算依赖于Tensor。一个Tensor中记录了很多属性其中�
 $$J = \left( \frac{\partial{y_1}}{\partial{x_1}} \right)$$
 
 
-继续阅读：
+### 常用函数
+
+- `Tensor.view(-1, feature_num)`：将特征向量拉平用于后续全连接层，-1表示通过其他维度推导。
+- `Tensor.size(dim=None)`：返回指定维度对应大小，如果不指定则返回包含所有维度的元组。
+- `Tensor.item()`：返回只有一个元素的Tensor的该元素的值。
+
+
+
+
+
+
+
+## 继续阅读
 - [Understanding pytorch’s autograd with grad_fn and next_functions](https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00)
 - [Getting Started with PyTorch Part 1: Understanding how Automatic Differentiation works](https://towardsdatascience.com/getting-started-with-pytorch-part-1-understanding-how-automatic-differentiation-works-5008282073ec)
+
+
+
+## 构建全新模型的pipeline
+
+1. 构建自己的数据集：
+   - 借助Dataset定义trainset（包含数据预处理transform），并借助trainset构建train_loader。
+   - 借助Dataset定义testset（包含数据预处理transform），并借助testset构建test_loader。
+2. 搭建网络模型：
+   - 借助Module定义自己的网络模型（包含网络结构和forward）。
+     - 仅层的堆叠（Lenet、AlexNet等）
+     - 层与基本块堆叠（GoogleNet、ResNet、RNN等）
+3. 定义训练和测试方法（训练一轮）：
+   - 训练方法参数为：网络模型net，训练数据train_loader，优化器optim，当前轮次epoch。
+   - 测试方法参数为：网络模型net，测试数据test_loader。
+4. 定义优化器，定义轮次epoch，开始训练和测试。
+5. 保存模型。
+
+
+
+
+## fine-tuning模型pipeline
+
 

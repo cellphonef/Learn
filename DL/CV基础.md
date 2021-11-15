@@ -292,6 +292,8 @@ Dropout可以被认为是对完整的神经网络抽样出一些子集，每次�
 
 ### GoogleNet
 
+aka Inception v1.
+
 创新点：
 - 使用了1 x 1卷积。
 - 使用inception结构。
