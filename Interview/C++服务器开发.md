@@ -667,6 +667,14 @@ pthread_mutex_unlock(&mtx);            // p4
 
 
 
+### OTHER
+
+ROB: Reorder Buffer.
+
+the process of an instruction leaving the ROB (in order) is called commit – an instruction commits only if it and all instructions before it have completed successfully (without an exception).
+
+precise exception: An exception for which the pipeline can be stopped, so instructions that preceded the faulting instruction can complete, and subsequent instructions can be flushed and redispatched after exception handling has completed.
+
 
 ### Go on reading
 

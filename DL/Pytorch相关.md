@@ -39,7 +39,7 @@ A：`nn.Module`给出了答案。
 
 #### construct model
 
-`nn.Module`类通过维护8个字典（orderedDict）来完成上述操作：
+`nn.Module`类通过维护8个有序字典（orderedDict）来完成上述操作：
 - `_parameters`:网络结构的权重参数，类型为tensor。
 - `_buffers`：通过register_buffer API填充值，通常用来将一些需要持久化的状态（但又不是网络的参数）放到_buffer里。 
 - `_backward_hooks`
@@ -80,7 +80,7 @@ A：`nn.Module`给出了答案。
 
 #### backward train
 
-函数`train`和`eval`的作用是将module及其submodule分别设置为training mode和evaluation mode。
+函数`train`和`eval`的作用是将module及其submodule分别设置为training mode和evaluation mode。通常这两个模式会影响BN层和Dropout层的表现。
 
 
 #### model save & load
@@ -189,8 +189,8 @@ step1：构造一个二维最大值池化层
 
 ```python
 # kernel_size: 卷积核大小
-# stride: 卷积核步长，默认大小与kernel_size相同
-# padding:
+# stride: 卷积核步长，默认大小与kernel_size相同（以此来保证不重叠）
+# padding: 在四周补0的层数，默认为0即不填充
 # dilation:
 # ceil_mode:
 MaxPool2d(kernel_size, stride =  None, padding = 0, dilation = 1,
@@ -199,8 +199,8 @@ MaxPool2d(kernel_size, stride =  None, padding = 0, dilation = 1,
 ```
 
 step2：输入输出
-- 输入Input为：$$
-- 输出Output为：$$
+- 输入Input为：$(N, C, H_{in}, W_{in})$
+- 输出Output为：$(N, C, H_{out}, W_{out})$
 
 step3：无可学习参数
 
@@ -247,7 +247,6 @@ Under the utils.data module, torch provides its own dataset and *DatasetLoader* 
 - `__getitem__`函数，应该返回指定索引的数据集中的数据和标签。
 - `__len__`函数，应该返回数据集的大小。
 
-
 ```python
 # 样例
 class MyDataset(data.Dataset):
@@ -276,14 +275,19 @@ class MyDataset(data.Dataset):
         return len(self.imgs)
 ```
 
-光有Dataset还不够，因为Dataset类仅仅只是读入数据集数据并且对读入的数据进行了索引。在实际加载数据中我们的数据量往往都很大，对此我们还需要以下几个功能：
-- 能够以batch_size的大小读入数据。
+光有Dataset还不够，因为Dataset类仅仅只是(1)读入数据集数据并且(2)对读入的数据进行了索引。在实际加载数据中我们的数据量往往都很大，对此我们还需要以下几个功能：
+- 能够以batch_size的大小读入数据（节约空间，用不到的数据可以晚加载）。
 - 能够对数据进行随机读取（即shuffle=True）。
 - 可以并行加载数据（num_worker = n）
 
-这就是DataLoader的功能了，我们在实现好我们的Dataset后，就可以使用`torch.util.data`中的`DataLoader`来实现这些功能了。
+这就是DataLoader的功能了，我们在实现好我们的Dataset后，就可以使用`torch.util.data`中的`DataLoader`来实现这些功能了（Dataset充当数据源的作用）。
 
 
+`torch.utils.data.Sampler` classes are used to specify the sequence of indices/keys used in data loading. They represent iterable objects over the indices to datasets. E.g., in the common case with stochastic gradient decent (SGD), a Sampler could randomly permute a list of indices and yield each one at a time, or yield a small number of them for mini-batch SGD.
+
+A sequential or shuffled `sampler` will be automatically constructed based on the `shuffle` argument to a `DataLoader`. Alternatively, users may use the `sampler` argument to specify a custom Sampler object that at each time yields the next index/key to fetch.
+
+A custom `Sampler` that yields a list of batch indices at a time can be passed as the `batch_sampler` argument. Automatic batching can also be enabled via batch_size and drop_last arguments.
 
 
 ## torch.optim
