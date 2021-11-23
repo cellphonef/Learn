@@ -48,7 +48,9 @@ $$g(x, y) = T[f(x, y)]$$
 
 ## 图像几何变换
 
+[图像几何变换](https://www.cnblogs.com/-wenli/p/11483584.html)
 
+[图像变换旋转推导](https://blog.csdn.net/saltriver/article/details/79680189)
 
 
 ## 彩色图像处理
@@ -177,7 +179,7 @@ Activate Function choose  three problem:
 
 
 In practise:
-- 
+- **Relu** (Good default choice).
 
 ### Data Preprocessing
 
@@ -214,11 +216,18 @@ In common use:
 #### Dropout
 
 
-
-
-
-
 Dropout可以被认为是对完整的神经网络抽样出一些子集，每次基于输入数据只更新子网络的参数。
+
+
+
+### Optim
+
+In practise:
+- **Adam** (Good default choice)
+
+
+
+### Hyperparameter
 
 
 
@@ -227,8 +236,8 @@ Dropout可以被认为是对完整的神经网络抽样出一些子集，每次�
 ## Convolution Network
 
 - Convolution Network stack CONV, POOL, FC layers.
-- Trend towards smaller filters and deeper architectures.
-- Trend towards getting rid of POOL/FC layers (just CONV).
+- **Trend towards smaller filters and deeper architectures. (Reference：[VGGNet]())**
+- **Trend towards getting rid of POOL/FC layers (just CONV). （Reference：[The All Convolutional Net](https://arxiv.org/abs/1412.6806))**
 - Typical architectures loook like **[(CONV-->RELU)\*N-->POOL]\*M-->(FC-->RELU)\*K, SOFTMAX**
 
 ### 卷积和池化操作
@@ -262,7 +271,7 @@ Dropout可以被认为是对完整的神经网络抽样出一些子集，每次�
   - $H_2 = (H_1 - F)/S + 1$ (Note: no padding)
   - $D_2 = D_1$
 - Introduces zero parameters since it computes a fixed function of the input
-- Note that it is not common to use zero-padding for Pooling Layer
+- Note that it is not common to use zero-padding and overlap for Pooling Layer 
 
 
 
