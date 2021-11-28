@@ -36,13 +36,17 @@ SimpleRNN具有记忆能力（通过cell保存结果，如方框内的东西）�
 
 ## LSTM结构
 
+> LSTMs are explicitly designed to avoid the long-term dependency problem. Remembering information for long periods of time is practically their default behavior, not something they struggle to learn!
+
+
+
 相比于SimpleRNN结构中，每次都让新的输出覆盖旧的记忆，LSTM的结构元中加入很多Gate的单元来控制记忆，如下图。
 
 ![LSTM architecture](img/RNN基础_2021-11-25-11-20-37.png)
 
 其中：
-- Input Gate：控制输入的闸门，使用sigmoid激活函数，0表示完全关闭，1表示完全开启。
-- Forget Gate：控制记忆的闸门，使用sigmoid激活函数，0表示完全关闭，1完全表示开启。
+- Forget Gate：控制那些记忆信息应该被遗忘的闸门，使用sigmoid激活函数，0表示完全关闭，1完全表示开启。
+- Input Gate：控制那些新信息需要被记忆的闸门，使用sigmoid激活函数，0表示完全关闭，1表示完全开启。
 - Output Gate：控制输出的闸门，使用sigmoid激活函数，0表示完全关闭，1表示完全开启。
 
 实际的LSTM结构元：
@@ -54,3 +58,9 @@ SimpleRNN具有记忆能力（通过cell保存结果，如方框内的东西）�
 LSTM整体结构：
 
 ![](img/RNN基础_2021-11-25-12-41-28.png)
+
+
+
+参考链接：
+- [Understanding LSTMs](https://colah.github.io/posts/2015-08-Understanding-LSTMs/)
+- 李宏毅机器学习-RNN
