@@ -245,10 +245,66 @@ feature map的尺寸计算方式：
 
 
 
+
+
+
+
+
+
+
+
+
+
 ## 名词概念
 
-**Ground Truth**
-- 译为：地面实况。在机器学习中就是『参考标准』，预测结果根据该参考标准计算损失，并优化该损失，在有监督学习中，可以简单理解成标签。
+### backbone
+
+
+### fine-tuning
+- 译为：微调。用于迁移学习。
+
+
+### embedding
+
+embedding，是一项技术方法，它将离散变量（discrete variables）转换成连续的向量（continuous vectors）。
+
+
+好处（个人总结）：
+- 便于计算机处理。
+- 每个实体都有统一表示，因此可以计算相似度，并且可以对原始数据进行降维。
+- 可以通过监督的方法学习，避免干扰。
+
+
+
+参考文献：[Neural Network Embeddings Explained](https://towardsdatascience.com/neural-network-embeddings-explained-4d028e6f0526)
+
+
+### open/close-set
+
+所谓close-set，就是所有测试集都在训练集出现过，不会出现新的未见过测试数据，并且测试结果一定会有一个确定的结果。形象化的解释就是：如果把训练看成学习教科书上的知识，测试集看成考试的题的话，那么考试过程中出的所有题目都是教科书上的，也因此题目的一定有一个明确的答案。
+
+所谓open-set，就是存在训练集中不存在的新测试数据，并且测试结果可能不存在一个确定的结果。形象化的解释是：如果把训练看成学习教科书上的知识，测试看成考试的题的话，那么考试过程中出的题会出现一些新题不是出自教科书的，也因此这个新题可能是没有答案的。
+
+
+![open/close-set](img/DL基础_2021-11-29-16-22-26.png)
+
+
+
+### 训练过程名词
+
+- sota：结果最优的。
+- iteration：一次iteration更新一次模型参数
+- batch/batch_size
+
+#### epoch、iteration、batch/batch_size
+
+- 一个epoch（中译：轮次）指的是遍历完训练集里的每一个样本，即跑完所有batch。
+-  多个epoch的目的是为了寻找全局最低值，因为一个epoch可能到不了全局最低值（参见：[Why are multiple epochs needed for deep learning?](https://www.quora.com/Why-are-multiple-epochs-needed-for-deep-learning)）。
+- 每次epoch通常伴随着shuffle（参见：[浅谈深度学习shuffle问题](https://blog.csdn.net/g_b_l/article/details/109600536)）。
+
+#### Ground Truth
+
+- 译为地面实况。在机器学习中就是『参考标准』，预测结果根据该参考标准计算损失，并优化该损失，在有监督学习中，可以简单理解成标签。
 
 例如目标检测情景中：
 
@@ -256,44 +312,7 @@ feature map的尺寸计算方式：
 
 
 
-**iteration**
-- 一个iteration（中译：迭代），每次迭代更新一次网络结构的参数。
 
-**batch-size**
-- 一次迭代所使用的样本称为batch，其数量称为batch-size。
-
-
-**epoch**
-
-- 一个epoch（中译：轮次）指的是遍历完训练集里的每一个样本，即跑完所有batch。
-- 多个epoch的目的是为了寻找全局最低值，因为一个epoch可能到不了全局最低值（参见：[Why are multiple epochs needed for deep learning?](https://www.quora.com/Why-are-multiple-epochs-needed-for-deep-learning)）。
-- 每次epoch通常伴随着shuffle（参见：[浅谈深度学习shuffle问题](https://blog.csdn.net/g_b_l/article/details/109600536)）。
-
-
-**regularization**
-- 译为：正则化。用于防止过拟合。
-- 主要有两种手段：
-  - L2正则化。
-  - Dropout正则化。
-
-
-**normalization**
-- 译为：归一化。用于消除不同数据之间的量纲，方便数据比较和共同处理。
-    - 线性转换：$y = \frac{x - min}{max - min}$
-    - 非线性转换：如对数转换和反余切函数转换。
-
-**gradient vanish& explode**
-- 译为：梯度消失和梯度爆炸
-- 梯度消失是指训练过程中，梯度值几乎消失（变得很小），使得权重无法得到有效更新
-- 梯度爆炸是指训练过程中，梯度值呈现指数增长。
-
-
-**fine-tuning**
-- 译为：微调。用于迁移学习。
-
-
-**sota**
-- sota是state-of-the-art的简写，表示最先进的。
 
 
 
