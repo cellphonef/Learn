@@ -369,6 +369,69 @@ WireShark界面包括五个组成部分：
 - 包的所有内容窗口（packet content window）。以十六进制和ASCII的形式显示被选中包的所有数据。
 
 
+### 拥塞控制
+
+**几个关键概念**：
+- MSS: Maximum segment size，即最大报文段大小，其大小不包含TCP header和IP header（注意与MTU区别）
+- CWND: Congestion WiNDow，即拥塞窗口，是控制发送端发送包（packet）的数量的原因之一（另一个是RWND，用于流量控制），单位为MSS。
+- RTT: Round-Trip-Time，即往返时间，是指
+
+CWND的改变是通过加法增/乘法减（addtive increase/multiplicative decrease, AIMD）方法来执行的，即如果发送端**所有**发送的报文段都被接收且发送端准时收到了ACK，CWND会增大，增大的数值为某个常数。
+（PS：这里的所有，依个人所见的意思是，当）
+
+
+**慢启动（slow start）**
+
+所谓慢启动，指的是一点一点的启动，“慢”地启动，通过试探网络状况来发送包，而不是一上来就发送大量包。
+
+慢启动的算法记住一个规则就行：当发送方每收到一个ACK，拥塞窗口cwnd就加1。
+
+![慢启动](img/TCP_IP网络基础知识_2021-12-07-11-10-22.png)
+
+虽然叫做慢启动，但其增长速率却一点也不慢，而是指数增长（每一个RTT），为了防止无限制的增长，慢启动有个增长阈值ssthresh来控制增长：
+- 当cwnd < ssthresh时，可以继续使用慢启动进行增长
+- 当cwnd > ssthresh时，就会停止慢启动，转而进入拥塞避免
+
+
+
+
+**拥塞避免**
+
+拥塞避免的算法记住一个规则就行：当发送方没收到一个ACK，拥塞窗口cwnd就加1/cwnd。
+
+
+
+
+
+
+
+
+**快速重传和快速恢复**
+
+The fast retransmit and fast recovery algorithms are usually implemented together as follows.
+
+1. When the third duplicate ACK is received, set ssthresh to no more than the value given in equation 3.
+
+2. Retransmit the lost segment and set cwnd to ssthresh plus 3*SMSS. This artificially "inflates" the congestion window by the number of segments (three) that have left the network and which the receiver has buffered.
+
+3. For each additional duplicate ACK received, increment cwnd by SMSS. This artificially inflates the congestion window in order to reflect the additional segment that has left the network.
+
+4. Transmit a segment, if allowed by the new value of cwnd and the receiver's advertised window.
+
+5. When the next ACK arrives that acknowledges new data, set cwnd to ssthresh (the value set in step 1). This is termed "deflating" the window.
+
+This ACK should be the acknowledgment elicited by the retransmission from step 1, one RTT after the retransmission (though it may arrive sooner in the presence of significant out- of-order delivery of data segments at the receiver). Additionally, this ACK should acknowledge all the intermediate segments sent between the lost segment and the receipt of the third duplicate ACK, if none of these were lost.
+
+Note: This algorithm is known to generally not recover very efficiently from multiple losses in a single flight of packets [FF96]. One proposed set of modifications to address this problem can be found in [FH98].
+
+
+
+当发送端将cwnd内的所有数据发送完后就必须等到每接收到一个ACK就会继续发。
+
+
+**Nagle算法和延迟确认**
+
+
 
 
 

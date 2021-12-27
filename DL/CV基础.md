@@ -39,6 +39,8 @@ $$g(x, y) = T[f(x, y)]$$
 
 空间滤波
 
+filters are spatially small along width and height but extend through the full depth of the input image. It is designed in such a manner that it detects a specific type of feature in the input image.
+
 
 
 平滑空间滤波器
@@ -77,7 +79,7 @@ HSI指色调、饱和度、强度。
 
 - Image Classification
 - loss and optimazer
-- Nerual Network and Backbo
+- Nerual Network and Backpropagation
 - Convolution Network
 
 ## Image Classification
@@ -242,6 +244,14 @@ In practise:
 
 ### 卷积和池化操作
 
+
+Convolution Network can learn from mutiple features parallelly. In the final stage, we stack all the output feature maps along with the depth and produce the output.
+
+**Feature** refer to minute details in the image data like edges, borders, shapes, textures, objects, circles, etc.
+- low-level feature: In the first few layers of the Convolution Network, the filter has small receptive field, so in these layer they can only learn patterns such as edges, borders, corner, etc. 
+- high-level feature: In the subsequent layer, the filter has more and more large receptive field with using pooling and conv operation, so they can combine the patterns to learn high-level features which have stronger semantic information.
+
+
 **Summary**. To summarize, the Conv Leyer:
 - Accepts a volume of size $W_1 * H_1 * D_1$
 - Requires four hyper parameters:
@@ -336,3 +346,78 @@ Summary:
 - After ResNet: CNNs were better than the human metric and focus shifted to Efficient Networks:
   - Lots of tiny networks aimed at mobile devices: **MobileNet**, **ShuffleNet**.
 - **Neural Architecture Search (NAS)** can now automate architecture design.
+
+
+
+## Attention Mechanisms
+
+**Enlightenment**：
+- Humans can naturally and effectively find salient regions in complex scenes.
+- Motivated by this observation, attention mechanisms were introducesd into computer vision with the aim of imitating this aspect of the human visual system.
+
+**Implement**:
+- In a vision system, an attention mechanism can be treated as a dynamic selection process that is realized by adaptively weighting features accordding to the importance of the input.
+- General form: $Attention = f(g(x), x)$, where g(x) can represent to use x to generate attention which corresponds to the process of attending to the discriminative regions. $f(g(x), x)$ means processing input x based on the attention g(x) which is consistent with processing critical regions and getting information.
+
+**Category of usage**:
+- Channel Attention: **what** to attend. (why? In deep neural networks, different channels in different feature maps usually represent different objects)
+- Spatial Attention: **where** to attend.
+- Temporal Attention: **when** to attend.
+- Branch Attention: **which** to attend.
+
+Moreover, the above attention mechanism can be combined to work in complex scenes:
+- Channel + Spatial Attention: what to attend and then where to attend.
+- 
+
+
+**Category of**:
+- Hard Attention.
+- Soft Attention.
+
+
+
+
+## Learning method
+
+### Supervised Learning
+
+
+### Semi-Supervised Learning
+
+### Weakly Supervised Learning
+
+### Unsupervised Learning
+
+
+## Representation Learning
+
+Machine learning algorithms whether can work not only depend on the choice of algorithm, but also on the quality and representaion of training data.
+
+For different type of data (e.g., text, image, video), different representation may lead to the lack of effective information or exposure, which determine whether the algorithm can solve the problem effectively. 
+
+**Representation Learning** is aim to simplfy the complex raw data for droping the redundant informantion and keeping useful informantion which is called feature.
+
+Feature extraction can be done by manual processing or automatic processing. Roughly specking, the former way we call it is feature project, the later we call it is representation learning. If data scale is small, we can use our own expreience and prior knowledge to design appropriate feature manually for downstream task such as classification. If data scale is big, however, we need to depend on the representation learning.
+
+
+### Representation Learning of Text
+
+
+### Representation Learning of image
+
+
+
+
+References:
+- [什么是Representation Learning?](https://zhuanlan.zhihu.com/p/136554341)
+
+
+
+
+raw data space ---> feature representation space ---> label space.
+
+
+
+
+
+
