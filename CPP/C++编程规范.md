@@ -175,4 +175,88 @@ Because of argument-dependent lookup, non-member functions and non-member operat
 
 
 
+## Naming
+
+- Type name: all use `CamelCase`
+  - Class/Struct name
+  - Type alias
+- Variable name
+  - Constant: all use `kCamelCase8_0_0`
+  - Local variable & Struct member variable: all use `lower_case`
+  - Class member variable: all use `lower_case_`
+- Function name
+  - Normal function: all use `CamelCase`
+  - Member function: all use ""
+- Namespace name: 
+- Enumerator name: all use `kCamelCase8_0_0`
+- Macro name: all use `UPPER_CASE`
+
+
+## Comment
+
+- Comment style
+
+use either the `//` or `/* */` syntax, as long as you are consistent.
+
+
+
+## Formating
+
+- Conditionals (i.e, `if` statement)
+
+```cpp
+// Normal situation
+
+// IF
+if (condition) {            // Note that brace position       
+  DoOneThing();
+  DoAnotherThing();
+}
+
+// IF-ELSE
+if (condition) {
+  DoOneThing();
+  DoTwoThing();
+} else {                    // Note that else and brace position.
+  DoThreeThing();
+}
+
+// IF-ELSEIF-ELSE
+if (condition1) {
+  DoOneThing();
+  DoAnotherThing();         // Note that else if and brace
+} else if (condition2) {   
+  DoAThirdThing();
+} else {
+  DoNothing();
+}
+
+// Special situation
+
+if (x == kFoo) return new Foo();
+
+if (x == kBar)
+  return new Bar(arg1, arg2, arg3);
+
+if (x == kQuz) { return new Quz(1, 2, 3); }
+
+```
+
+
+
+
+- Loops and Switch statement
+
+
+
+
+
+
+
+
+
+
+
+
+
 
