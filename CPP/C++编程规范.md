@@ -177,19 +177,23 @@ Because of argument-dependent lookup, non-member functions and non-member operat
 
 ## Naming
 
-- Type name: all use `CamelCase`
+- File Names: all use `my_useful_class.cc`
+- Type Names: all use `CamelCase`
   - Class/Struct name
   - Type alias
-- Variable name
-  - Constant: all use `kCamelCase8_0_0`
-  - Local variable & Struct member variable: all use `lower_case`
-  - Class member variable: all use `lower_case_`
-- Function name
+  - Enums
+  - Type template parameter
+- Variable Names
+  - Local Variable & Struct Data Members: all use `lower_case`
+  - Class Data Members: all use `lower_case_`
+- Constant Names: all use `kCamelCase8_0_0`
+- Function Names
   - Normal function: all use `CamelCase`
   - Member function: all use ""
-- Namespace name: 
-- Enumerator name: all use `kCamelCase8_0_0`
-- Macro name: all use `UPPER_CASE`
+- Namespace Names: 
+- Enumerator Names: all use `kCamelCase8_0_0`
+- Macro Names: all use `UPPER_CASE`
+- Exceptions to Naming Rules: If you are naming something that is analogous to an existing C or C++ entity then you can follow the existing naming convention scheme.
 
 
 ## Comment
@@ -201,6 +205,45 @@ use either the `//` or `/* */` syntax, as long as you are consistent.
 
 
 ## Formating
+
+General Rules
+- fit in one line
+- break into two line:
+  - subsequent line aligned with the first 
+- break into multiline
+  - four space indent.
+
+- Line Length
+
+Each line of text in your code should be at most 80 characters long.
+
+- Function Declarations and Definitions
+
+```cpp
+ReturnType ClassName::FunctionName(Type par_name1, Type par_name2) {
+  DoSomething();
+  // ...
+}
+
+ReturnType ClassName::ReallyLongFunctionName(Type par_name1,
+                                             Type par_name2) {
+  DoSomething();
+  // ...                                             
+}
+
+ReturnType ClassName::ReallyReallyReallyLongFunctionName(
+    Type par_name1,
+    Type par_name2,
+    Type par_name3) {
+  DoSomething();
+  // ...
+
+}
+
+```
+
+
+
 
 - Conditionals (i.e, `if` statement)
 
@@ -220,6 +263,7 @@ if (condition) {
 } else {                    // Note that else and brace position.
   DoThreeThing();
 }
+
 
 // IF-ELSEIF-ELSE
 if (condition1) {
@@ -249,12 +293,80 @@ if (x == kQuz) { return new Quz(1, 2, 3); }
 
 
 
+- Boolean Experssion
+
+```cpp
+if (this_one_thing > this_other_thing &&
+    a_third_thing == a_fourth_thing &&
+    yet_another && lastone) {
+
+}
+
+```
+
+
+- Class Formatting
+
+```cpp
+class MyClass : public OtherClass {
+ public:                                              // Note that one space indent
+  MyClass();                                          // Regular two space indent
+  explicit MyClass(int var);
+  ~MyClass();
+
+  void SomeFunction();
+
+  void set_some_val(int val) {some_val_ = var; }
+  void some_val() const { return some_val_; }
+
+ private:
+  bool SomeInternalFunction();
+
+  int some_val_;
+  int some_other_val_
+};
+```
+
+```cpp
+// When everything fits on one line:
+MyClass::MyClass(int val) : some_var_(var) {
+  DoSomething();
+}
+
+// 
+MyClass::MyClass(int val)
+    : some_val_(val), some_other_var_(var + 1) {
+  DoSomething();
+}
+
+
+//
+MyClass::MyClass(int val)
+    : some_val_(val),
+      some_other_val_(val + 1) {
+  DoSomething();
+}
+
+
+
+```
 
 
 
 
 
+- Namespace Formatting
 
+```cpp
+namespace ns {
+
+void foo() {        // Note that no space here!
+
+}
+
+}  // ns
+
+```
 
 
 
