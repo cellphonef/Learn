@@ -1,6 +1,58 @@
-# Pytorch
+# PyTorch
 
 The Pytorch library, besides offering the computational functions as Numpy does, also offer a set of modules that enable developers to quickly design, train, and test deep learning models.
+
+## Tensors & Gradients
+
+Tensors are conceptually similar to Numpy arrays. A tensor is an n-dimensional array on which we can operate mathematical functions, accelerate computations via GPUs, and tensors can also be used to keep track of a computational graph and gradients, which prove vital for deep learning. To run a tensor on a GPU, all we need is to cast the tensor into a certain data type.
+
+
+**Autograd**
+
+PyTorch中的计算依赖于Tensor。一个Tensor中记录了很多属性其中包括：
+- data：存储的数据。
+- requires_grad：是否需要求导，默认为False。只要有输入Tensor的requires_grad为True，则其输出Tensor也需要求导。
+- grad：该Tensor的梯度。
+- grad_fn：用于指示梯度函数的类型，用于计算该tensor的output对于input的梯度。
+- is_leaf：用来指示该Tensor是否为叶子节点，只有叶子节点才会保留梯度。
+
+
+为了使用自动求导（autograd）：
+1. 创建叶子节点。首先要创建初始参数（叶子节点），并将初始参数的`requires_grad`设为true。
+2. 前向结算。接着将初始参数进行运算得到中间结果（非叶子节点），该中间结果是新的tensor对象并且自动被赋予`grad_fn`属性，该属性为梯度函数。
+3. 反向传播。对最后的结果执行`backward`则会进行反向传播，求出各个叶子节点的梯度，保存在`grad`里面。
+
+
+注意：
+- 非叶子节点的梯度在`backward`执行完后会清空。如果要保留则需要将`retain_graph`设置为true。
+- 多次反向传播时，梯度是累加的，因此每次进行梯度计算时需要考虑是否清零。
+
+对于Function，其是反向传播的关键，Tensor和Function互相结合就可以构建一个记录有整个计算过程的有向无环图。Function包含两个重要函数forward和backward，其中forward将保留足够的信息用于backward，backward接收由实参传递的对于output的gradient，并通过该gradient计算所有input的gradient然后返回。
+
+
+
+
+
+### Tensor常用函数
+
+- `Tensor.view(-1, feature_num)`：将特征向量拉平用于后续全连接层，-1表示通过其他维度推导。
+- `Tensor.size(dim=None)`：返回指定维度对应大小，如果不指定则返回包含所有维度的元组。
+- `Tensor.item()`：返回只有一个元素的Tensor的该元素的值。
+
+
+
+
+
+
+
+## 继续阅读
+- [Understanding pytorch’s autograd with grad_fn and next_functions](https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00)
+- [Getting Started with PyTorch Part 1: Understanding how Automatic Differentiation works](https://towardsdatascience.com/getting-started-with-pytorch-part-1-understanding-how-automatic-differentiation-works-5008282073ec)
+
+
+
+
+## 机器学习 & 深度学习
 
 创建和训练神经网络包括以下基本步骤：
 1. 构建神经网络结构。
@@ -232,9 +284,9 @@ step3：无可学习参数
 > 
 > -> 定义数据加载器
 
-当我们定义好我们的神经网络结构后，我们就可以定义数据加载器用于模型的前向传播。
+当我们定义好我们的神经网络结构后，我们就可以定义DataLoader用于模型的前向传播。
 
-所谓数据加载器，其实就是一个不断从数据集中读取数据的生成器类。
+所谓DataLoader，其实就是一个不断从Dataset中读取数据的生成器类。
 
 
 
@@ -242,10 +294,10 @@ step3：无可学习参数
 
 Under the utils.data module, torch provides its own dataset and *DatasetLoader* classes, which extremely handy due to their abstract and flexble implementations.
 
-为了加载我们自己的数据，我们可以通过继承`torch.utils.data`中的`Dataset`类，并修改其中方法来实现：
-- `__init__`函数做一些初始化工作，通常保存文件的路径。
-- `__getitem__`函数，应该返回指定索引的数据集中的数据和标签。
-- `__len__`函数，应该返回数据集的大小。
+为了加载我们自己的数据，我们可以通过继承`torch.utils.data`中的`Dataset`类，该类的完成的功能就是从其他地方读取数据并提供获取这些数据的接口。对于PyTorch，一个`Dataset`应该实现一下三个函数：
+- `__init__`；
+- `__getitem__`；
+- `__len__`；
 
 ```python
 # 样例
@@ -275,7 +327,7 @@ class MyDataset(data.Dataset):
         return len(self.imgs)
 ```
 
-光有Dataset还不够，因为Dataset类仅仅只是(1)读入数据集数据并且(2)对读入的数据进行了索引。在实际加载数据中我们的数据量往往都很大，对此我们还需要以下几个功能：
+光有Dataset还不够，因为Dataset类仅仅只是读入数据集数据并对读入的数据进行了索引。而在实际加载数据中我们的数据量往往都很大，对此我们还需要以下几个功能：
 - 能够以batch_size的大小读入数据（节约空间，用不到的数据可以晚加载）。
 - 能够对数据进行随机读取（即shuffle=True）。
 - 可以并行加载数据（num_worker = n）
@@ -332,7 +384,7 @@ The *optim* module includes all the tools and functionalities related to running
 # optim: 优化器
 # epoch: 轮次
 def train(model, device, train_dataloader, optim, epoch)
-    model.train()    # 使用BN和Dropout生效
+    model.train()    # 使得BN和Dropout生效
     optim.zero_grad()
     pred_prob = model()
     loss = F.nll_loss(pred_prob, y)
@@ -352,61 +404,12 @@ def test(model, device, test_dataloader)
 
 **torch.no_grad**
 
+当我们测试的时候，我们不希望计算梯度。
+
 ```python
 with torch.no_grad():
     # ...
 ```
-
-
-
-
-
-## Tensor module
-
-Tensors are conceptually similar to Numpy arrays. A tensor is an n-dimensional array on which we can operate mathematical functions, accelerate computations via GPUs, and tensors can also be used to keep track of a computational graph and gradients, which prove vital for deep learning. To run a tensor on a GPU, all we need is to cast the tensor into a certain data type.
-
-Pytorch中的计算依赖于Tensor。一个Tensor中记录了很多属性其中包括：
-- data：存储的数据。
-- requires_grad：是否需要求导，默认为False。只要有输入Tensor的requires_grad为True，则其输出Tensor也需要求导。
-- grad：该Tensor的梯度。
-- grad_fn：用于指示梯度函数的类型，用于计算该tensor的output对于input的梯度。
-- is_leaf：用来指示该Tensor是否为叶子节点，只有叶子节点才会保留梯度。
-
-
-为了使用自动求导（autograd）：
-1. 创建叶子节点。首先要创建初始参数（叶子节点），并将初始参数的`requires_grad`设为true。
-2. 前向结算。接着将初始参数进行运算得到中间结果（非叶子节点），该中间结果是新的tensor对象并且自动被赋予`grad_fn`属性，该属性为梯度函数。
-3. 反向传播。对最后的结果执行`backward`则会进行反向传播，求出各个叶子节点的梯度，保存在`grad`里面。
-
-
-注意：
-- 非叶子节点的梯度在`backward`执行完后会清空。如果要保留则需要将`retain_graph`设置为true。
-- 多次反向传播时，梯度是累加的，因此每次进行梯度计算时需要考虑是否清零。
-
-
-对于Function，其是反向传播的关键，Tensor和Function互相结合就可以构建一个记录有整个计算过程的有向无环图。Function包含两个重要函数forward和backward，其中forward将保留足够的信息用于backward，backward接收由实参传递的对于output的gradient，并通过该gradient计算所有input的gradient然后返回。
-
-
-
-数学上，如果有一个函数值和自变量都为向量的函数 $\vec{y} = f(\vec{x})$，那么 $\vec{y}$ 关于 $\vec{x}$ 的梯度就是一个雅克比矩阵：
-$$J = \left( \frac{\partial{y_1}}{\partial{x_1}} \right)$$
-
-
-### 常用函数
-
-- `Tensor.view(-1, feature_num)`：将特征向量拉平用于后续全连接层，-1表示通过其他维度推导。
-- `Tensor.size(dim=None)`：返回指定维度对应大小，如果不指定则返回包含所有维度的元组。
-- `Tensor.item()`：返回只有一个元素的Tensor的该元素的值。
-
-
-
-
-
-
-
-## 继续阅读
-- [Understanding pytorch’s autograd with grad_fn and next_functions](https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00)
-- [Getting Started with PyTorch Part 1: Understanding how Automatic Differentiation works](https://towardsdatascience.com/getting-started-with-pytorch-part-1-understanding-how-automatic-differentiation-works-5008282073ec)
 
 
 
