@@ -88,7 +88,6 @@ Pore-based representation is a feature vector whose elements are the fingerprint
 - False Matching Rate (FMR)
   - FMR100
   - FMR1000
-  - ...
 - False Non-Matching Rate (FNMR)
 - Equal Error Rate (EER)
 - Receiver of Curve (ROC)
@@ -103,10 +102,13 @@ Pore-based representation is a feature vector whose elements are the fingerprint
 
 ## Public dataset
 
+- PolyU HRF
 - FVC(2002, 2004)
 - FVC
 - NIST fingerprint databases
 - SPD2010
 
+
+### PolyU HRF
 
 
